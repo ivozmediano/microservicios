@@ -82,7 +82,7 @@ export class MicroserviciosStack extends cdk.Stack {
       .resourceForPath("registros")
       .addMethod("POST", new apigw.LambdaIntegration(consultaTodosRegistrosFunction))
   
-    new CodePipeline(this, 'Pipeline', {
+    const pipeline = new CodePipeline(this, 'Pipeline', {
       pipelineName: 'TestPipeline',
       synth: new ShellStep('Synth', {
         input: CodePipelineSource.gitHub('ivozmediano/microservicios', 'main'),
@@ -93,5 +93,9 @@ export class MicroserviciosStack extends cdk.Stack {
                   ]
       }),
     });
+
+    /*pipeline.addStage(new MyPipelineAppStage(this, "test", {
+      env: { account: "061496817474", region: "eu-west-2" }
+    }));*/
   }
 }
