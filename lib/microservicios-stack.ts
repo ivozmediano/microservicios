@@ -82,8 +82,14 @@ export class MicroserviciosStack extends cdk.Stack {
       .resourceForPath("registros")
       .addMethod("POST", new apigw.LambdaIntegration(consultaTodosRegistrosFunction))
   
-    new CodePipeline(this, 'Pipeline') {
-
-    }
+    new CodePipeline(this, 'Pipeline', {
+      pipelineName: 'TestPipeline',
+      synth: new ShellStep('Synth', {
+        input: CodePipelineSource.gitHub('ivozmediano/microservicios', 'main'),
+        commands: ['npm ci',
+                    'npm run build',
+                    'npx cdk synth']
+      }),
+    });
   }
 }
