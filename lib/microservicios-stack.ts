@@ -83,19 +83,6 @@ export class MicroserviciosStack extends cdk.Stack {
       .addMethod("POST", new apigw.LambdaIntegration(consultaTodosRegistrosFunction))
   
     new CodePipeline(this, 'Pipeline', {
-      synth: new ShellStep('Synth', {
-        input: CodePipelineSource.connection('ivozmediano/microservicios', 'main', {
-          connectionArn: 'arn:aws:codestar-connections:eu-west-2:061496817474:connection/db8e30c5-ec86-4b14-85e9-2bcf86f29c40', // Created using the AWS console * });',
-        }),
-        commands: [
-          'npm ci',
-          'npm run build',
-          'npx cdk synth',
-        ],
-      }),
-    });
-
-    /*new CodePipeline(this, 'Pipeline', {
       pipelineName: 'TestPipeline',
       synth: new ShellStep('Synth', {
         input: CodePipelineSource.gitHub('ivozmediano/microservicios', 'main'),
@@ -105,7 +92,7 @@ export class MicroserviciosStack extends cdk.Stack {
                     'npx cdk synth',
                   ]
       }),
-    });*/
+    });
 
     /*pipeline.addStage(new MyPipelineAppStage(this, "test", {
       env: { account: "061496817474", region: "eu-west-2" }
