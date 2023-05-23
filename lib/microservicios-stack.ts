@@ -103,7 +103,7 @@ export class MicroserviciosStack extends cdk.Stack {
     // Agrega una acción de notificación cuando se active la alarma
     lambdaAlarm.addAlarmAction(new actions.SnsAction(snsTopic));
 
-    /*new CodePipeline(this, 'Pipeline', {
+    new CodePipeline(this, 'Pipeline', {
       pipelineName: 'TestPipeline',
       synth: new ShellStep('Synth', {
         input: CodePipelineSource.gitHub('ivozmediano/microservicios', 'main'),
@@ -111,7 +111,7 @@ export class MicroserviciosStack extends cdk.Stack {
       }),
       dockerEnabledForSynth: true,
       dockerEnabledForSelfMutation: true
-    });*/
+    });
 
     /*pipeline.addStage(new MyPipelineAppStage(this, "test", {
       env: { account: "061496817474", region: "eu-west-2" }
