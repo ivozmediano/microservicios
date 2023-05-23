@@ -87,8 +87,8 @@ export class MicroserviciosStack extends cdk.Stack {
       synth: new ShellStep('Synth', {
         input: CodePipelineSource.gitHub('ivozmediano/microservicios', 'main'),
         commands: ['npm ci',
-                    'npm run build'/*,
-      'cdk synth'*/]
+                    'npm run build',
+                    'npm cdk synth']
       }),
     });
   }
