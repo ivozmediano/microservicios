@@ -88,7 +88,8 @@ export class MicroserviciosStack extends cdk.Stack {
         input: CodePipelineSource.gitHub('ivozmediano/microservicios', 'main'),
         commands: ['npm ci', 'npm run build', 'npx cdk synth']
       }),
-      dockerEnabledForSynth: true
+      dockerEnabledForSynth: true,
+      dockerEnabledForSelfMutation: true
     });
 
     /*pipeline.addStage(new MyPipelineAppStage(this, "test", {
