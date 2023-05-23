@@ -6,8 +6,11 @@ import * as lambda from "aws-cdk-lib/aws-lambda";
 import * as apigw from "aws-cdk-lib/aws-apigateway";
 import * as path from 'path';
 import { CodePipeline, CodePipelineSource, ShellStep } from "aws-cdk-lib/pipelines";
-import { ManualApprovalStep } from 'aws-cdk-lib/pipelines';
-//import { MyPipelineAppStage } from './stage';
+import * as cloudwatch from 'aws-cdk-lib/aws-cloudwatch';
+import * as actions from 'aws-cdk-lib/aws-cloudwatch-actions';
+import { Topic } from 'aws-cdk-lib/aws-sns';
+/*import { ManualApprovalStep } from 'aws-cdk-lib/pipelines';
+import { MyPipelineAppStage } from './stage';*/
 
 export class MicroserviciosStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props?: cdk.StackProps) {
@@ -82,7 +85,25 @@ export class MicroserviciosStack extends cdk.Stack {
       .resourceForPath("registros")
       .addMethod("POST", new apigw.LambdaIntegration(consultaTodosRegistrosFunction))
   
-    new CodePipeline(this, 'Pipeline', {
+    //Métrica para invocaciones lambda
+    const lambdaInvocationsMetric = nuevoRegistroFunction.metric('Invocations');
+    
+    // Crea una alarma de CloudWatch que se active cuando se realicen invocaciones a la función Lambda
+    const lambdaAlarm = new cloudwatch.Alarm(this, 'LambdaInvocationsAlarm', {
+      alarmName: 'Lambda Invocations Alarm',
+      metric: lambdaInvocationsMetric,
+      threshold: 1, // Se activará la alarma cuando se realice al menos una invocación
+      evaluationPeriods: 1,
+    });
+
+    // Obtiene el objeto ITopic a partir del ARN del recurso SNS
+    const topicArn = 'arn:aws:sns:eu-west-2:061496817474:invocacion-lambda';
+    const snsTopic = Topic.fromTopicArn(this, 'SnsTopic', topicArn);
+
+    // Agrega una acción de notificación cuando se active la alarma
+    lambdaAlarm.addAlarmAction(new actions.SnsAction(snsTopic));
+
+    /*new CodePipeline(this, 'Pipeline', {
       pipelineName: 'TestPipeline',
       synth: new ShellStep('Synth', {
         input: CodePipelineSource.gitHub('ivozmediano/microservicios', 'main'),
@@ -90,7 +111,7 @@ export class MicroserviciosStack extends cdk.Stack {
       }),
       dockerEnabledForSynth: true,
       dockerEnabledForSelfMutation: true
-    });
+    });*/
 
     /*pipeline.addStage(new MyPipelineAppStage(this, "test", {
       env: { account: "061496817474", region: "eu-west-2" }
