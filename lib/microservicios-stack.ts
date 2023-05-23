@@ -5,7 +5,9 @@ import * as dynamodb from "aws-cdk-lib/aws-dynamodb";
 import * as lambda from "aws-cdk-lib/aws-lambda";
 import * as apigw from "aws-cdk-lib/aws-apigateway";
 import * as path from 'path';
-// import * as sqs from 'aws-cdk-lib/aws-sqs';
+import { CodePipeline, CodePipelineSource, ShellStep } from "aws-cdk-lib/pipelines";
+import { ManualApprovalStep } from 'aws-cdk-lib/pipelines';
+//import { MyPipelineAppStage } from './stage';
 
 export class MicroserviciosStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props?: cdk.StackProps) {
@@ -79,5 +81,9 @@ export class MicroserviciosStack extends cdk.Stack {
     registrosAPI.root
       .resourceForPath("registros")
       .addMethod("POST", new apigw.LambdaIntegration(consultaTodosRegistrosFunction))
+  
+    new CodePipeline(this, 'Pipeline') {
+
+    }
   }
 }
