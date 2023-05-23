@@ -54,7 +54,7 @@ export class MicroserviciosStack extends cdk.Stack {
       },
     });
 
-    //Permisos para las funciones lambda
+    //Permisos para las diferentes funciones lambda
     tablaRegistros.grantReadWriteData(nuevoRegistroFunction);
     tablaRegistros.grantReadData(consultaRegistroFunction);
     tablaRegistros.grantReadWriteData(eliminaRegistroFunction);
