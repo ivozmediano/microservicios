@@ -17,7 +17,7 @@ export class MicroserviciosStack extends cdk.Stack {
     super(scope, id, props);
 
     //Definición de la tabla Dynamodb
-    /*const tablaRegistros = new dynamodb.Table(this, "TablaRegistros", {
+    const tablaRegistros = new dynamodb.Table(this, "TablaRegistros", {
       partitionKey: { name: "id", type: dynamodb.AttributeType.STRING },
       removalPolicy: cdk.RemovalPolicy.DESTROY,
     });
@@ -103,8 +103,7 @@ export class MicroserviciosStack extends cdk.Stack {
     // Agrega una acción de notificación cuando se active la alarma
     lambdaAlarm.addAlarmAction(new actions.SnsAction(snsTopic));
 
-    */
-    new CodePipeline(this, 'Pipeline', {
+    /*new CodePipeline(this, 'Pipeline', {
       pipelineName: 'TestPipeline',
       synth: new ShellStep('Synth', {
         input: CodePipelineSource.gitHub('ivozmediano/microservicios', 'main'),
@@ -114,7 +113,7 @@ export class MicroserviciosStack extends cdk.Stack {
       dockerEnabledForSelfMutation: true
     });
 
-    /*pipeline.addStage(new MyPipelineAppStage(this, "test", {
+    pipeline.addStage(new MyPipelineAppStage(this, "test", {
       env: { account: "061496817474", region: "eu-west-2" }
     }));*/
   }
