@@ -23,7 +23,7 @@ export class MicroserviciosStack extends cdk.Stack {
     });
 
     //Definición de funciones lambda
-    const nuevoRegistroFunction = new lambda.Function(this, "NuevoRegistroFunction", {
+    /*const nuevoRegistroFunction = new lambda.Function(this, "NuevoRegistroFunction", {
       runtime: lambda.Runtime.NODEJS_14_X,
       handler: 'handler.nuevoRegistro', //Método nuevoRegistro del archivo handler.js
       code: lambda.Code.fromAsset(path.resolve(__dirname, 'lambda')), //Directorio donde se encuentra el código (debe añadirse)
@@ -103,7 +103,7 @@ export class MicroserviciosStack extends cdk.Stack {
     // Agrega una acción de notificación cuando se active la alarma
     lambdaAlarm.addAlarmAction(new actions.SnsAction(snsTopic));
 
-    new CodePipeline(this, 'Pipeline', {
+    */new CodePipeline(this, 'Pipeline', {
       pipelineName: 'TestPipeline',
       synth: new ShellStep('Synth', {
         input: CodePipelineSource.gitHub('ivozmediano/microservicios', 'main'),
