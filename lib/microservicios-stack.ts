@@ -85,10 +85,10 @@ export class MicroserviciosStack extends cdk.Stack {
       .resourceForPath("registros")
       .addMethod("POST", new apigw.LambdaIntegration(consultaTodosRegistrosFunction))
   
-    //Métrica para invocaciones lambda
+    //Métrica para invocaciones Lambda de creación de nuevo registro
     const lambdaInvocationsMetric = nuevoRegistroFunction.metric('Invocations');
     
-    // Crea una alarma de CloudWatch que se active cuando se realicen invocaciones a la función Lambda
+    //Alarma de CloudWatch que se activa cuando se realicen invocaciones a la función Lambda
     const lambdaAlarm = new cloudwatch.Alarm(this, 'LambdaInvocationsAlarm', {
       alarmName: 'Lambda Invocations Alarm',
       metric: lambdaInvocationsMetric,
@@ -96,14 +96,14 @@ export class MicroserviciosStack extends cdk.Stack {
       evaluationPeriods: 1,
     });
 
-    // Obtiene el objeto ITopic a partir del ARN del recurso SNS
+    //Recursos AWS SNS Topic
     const topicArn = 'arn:aws:sns:eu-west-2:061496817474:invocacion-lambda';
     const snsTopic = Topic.fromTopicArn(this, 'SnsTopic', topicArn);
 
-    // Agrega una acción de notificación cuando se active la alarma
+    //Agregaracción de notificación cuando se active la alarma
     lambdaAlarm.addAlarmAction(new actions.SnsAction(snsTopic));
 
-    /*new CodePipeline(this, 'Pipeline', {
+    new CodePipeline(this, 'Pipeline', {
       pipelineName: 'TestPipeline',
       synth: new ShellStep('Synth', {
         input: CodePipelineSource.gitHub('ivozmediano/microservicios', 'main'),
@@ -113,7 +113,7 @@ export class MicroserviciosStack extends cdk.Stack {
       dockerEnabledForSelfMutation: true
     });
 
-    pipeline.addStage(new MyPipelineAppStage(this, "test", {
+    /*pipeline.addStage(new MyPipelineAppStage(this, "test", {
       env: { account: "061496817474", region: "eu-west-2" }
     }));*/
   }
